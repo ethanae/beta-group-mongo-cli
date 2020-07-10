@@ -4,7 +4,8 @@ from stdiocolours import OKGREEN, ENDC, OKBLUE
 
 class Mongo:
     def __init__(self, conn, db_name, collection_name): 
-        self.db_collection = MongoClient(conn)[db_name][collection_name]
+        self.client = MongoClient(conn)
+        self.db_collection = self.client[db_name][collection_name]
   
     def insert_documents(self, data):
         for d in data:
@@ -14,4 +15,5 @@ class Mongo:
         print(OKGREEN + '\nInserted %s documents'%(len(result.inserted_ids)) + ENDC+'\n')
         print(OKBLUE + 'Document ObjectIDs:\n\n%s'%(result.inserted_ids) + ENDC+'\n')
         print(OKGREEN + 'Done' + ENDC+'\n')
+        self.client.close()
         return result.inserted_ids
